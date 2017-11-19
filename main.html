@@ -1,0 +1,289 @@
+<html lang="zh-tw">
+<head>
+
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<link rel="icon" href="img/favicon.ico" type="image/x-ico"/>
+<title>photography</title>
+<style type="text/css">
+.load{
+	visibility:hidden;
+}
+
+.sidenav {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #bfbdb7;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+	text-align:center;
+}
+
+.sidenav a {
+	padding: 8px 8px 8px 0px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #d9e8e3;
+	display: block;
+	transition: 0.3s;
+	font-family: "Yu Gothic";
+
+}
+
+.sidenav a:hover{
+	color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+.sidenav {padding-top: 15px;}
+.sidenav a {font-size: 18px;}
+}
+
+
+	.abgne_product_arrow_silder {
+		width: 100vw;
+		height: 100vh;
+		position: fixed;
+		overflow: hidden;
+		text-align: center;
+	}
+	.abgne_product_arrow_silder ul, .abgne_product_arrow_silder ul li {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height:100%;
+		text-align: center;
+		list-style: none;
+	}
+	.abgne_product_arrow_silder ul li img{
+		width:40vw;
+		text-align : center;
+	}
+	.prev {
+		width: 38px;
+		height: 48px;
+		position: fixed;
+		line-height: 270px;
+		font-size: 50px;
+		left: 2vw;
+		top: 25vh;		/* (區塊高-圖片高) / 2 */
+		z-index: 100;
+		color:#96C6CB;
+		text-decoration:none;
+		background-image: url("img/prev.png");
+		background-repeat: no-repeat;
+		background-size: 38px auto;
+	}
+	.next {
+
+		width: 38px;
+		height: 48px;
+		position: fixed;
+		line-height: 270px;
+		font-size: 50px;
+		position: fixed;
+		right: 2vw;
+		top: 25Vh;		/* (區塊高-圖片高) / 2 */
+		z-index:100;
+		color:#96C6CB;
+		text-decoration:none;
+		background-image: url("img/next.png");
+		background-repeat: no-repeat;
+		background-size: 38px auto;
+	}
+	.abgne_product_arrow_silder ul li {
+		position: absolute;
+		z-index: 1;
+	}
+	.abgne_product_arrow_silder ul li.selected {
+		z-index: 99;
+	}
+	.nav-thumb{
+		opacity: 0.7;
+		width:8vw;
+		float:left;
+		margin-right:1vw;
+		transition: opacity 0.4s;
+	}
+	.nav-thumb:hover{
+		opacity: 1;
+	}
+
+	.modal {
+	    display:    none;
+	    position:   fixed;
+	    z-index:    1000;
+	    top:        0;
+	    left:       0;
+	    height:     100%;
+	    width:      100%;
+	    background: rgba( 255, 255, 255, .8 )
+	                url('http://i.stack.imgur.com/FhHRx.gif')
+	                50% 50%
+	                no-repeat;
+	}
+.rows{
+	background-color: #000;
+
+
+}
+
+
+</style>
+<script type="text/javascript">
+function load(){
+	$("body").removeClass("load");
+}
+$(function(){
+
+	var $body = $("body");
+
+		//loaded();
+		setTimeout("load()",2000);
+		console.log("loading");
+
+
+     //ajaxStop: function() { $body.removeClass("loading"); }
+});
+	$(function(){
+		var $silder = $('.abgne_product_arrow_silder'),
+			fadeSpeed = 400
+			$li = $('ul li', $silder).not(':first').css('opacity', 0).end();
+		$('.nav-thumb').click(function(){
+
+			console.log("XXX");
+			no=$(".nav-thumb").index(this);
+			console.log(no);
+			$li.eq(no).stop().fadeTo(fadeSpeed + 100, 1, function(){
+					}).addClass('selected').siblings().fadeTo(fadeSpeed, 0).removeClass('selected');
+
+			return false;
+		}).focus(function(){
+			this.blur();
+		});
+
+
+
+	});
+</script>
+
+<script type="text/javascript">
+function openNav() {
+    document.getElementById("mySidenav").style.width = "15%";
+		document.getElementById("mySidenav").style.opacity = "0.8";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+
+$(function(){
+// 先取得必要的元素並用 jQuery 包裝
+// 並設定箭頭圖片的寬度及其透明度
+// 接著產生兩個放置箭頭用的空白超連結
+var $silder = $('.abgne_product_arrow_silder'),
+	$li = $('ul li', $silder).not(':first').css('opacity', 0).end(),
+
+	$arrows = $('<a href="#" class="prev"></a><a href="#" class="next"></a>'),
+	$prev = $arrows.filter('.prev'),
+	$next = $arrows.filter('.next'),
+	fadeSpeed = 400;
+
+// 把箭頭超連結加到 $silder 中
+// 並幫 $silder 加上 hover 事件
+$silder.append($arrows);
+arrowAction(0, 0);
+
+// 當滑鼠點擊左右箭頭時
+$arrows.click(function(){
+	// 先取出目前顯示的 li 及其排行
+	console.log("CXXX");
+	var $selected = $li.filter('.selected'),
+		no = $selected.index();
+	// 判斷是要上一張還是下一張
+	no = (this.className=='prev' ? (no + $li.length - 1) : no + 1) % $li.length;
+	$li.eq(no).stop().fadeTo(fadeSpeed + 100, 1, function(){
+			}).addClass('selected').siblings().fadeTo(fadeSpeed, 0).removeClass('selected');
+
+	return false;
+}).focus(function(){
+	this.blur();
+});
+
+// 控制左右箭頭顯示或隱藏
+function arrowAction(l, r){
+	$prev.stop().animate({  });
+	$next.stop().animate({  });
+}
+
+});
+
+
+</script>
+
+
+</head>
+
+<body class="load">
+
+	<div id="mySidenav" class="sidenav">
+	<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+	<a href="#">2017</a>
+	<a href="#">2016</a>
+	<a href="#">2015</a>
+	<a href="#">2014</a>
+	</div>
+
+	<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+
+
+
+	<div class="abgne_product_arrow_silder">
+
+		<ul>
+			<li class="selected"><img src="img/1.jpg" ></li>
+			<li><img src="img/2.jpg"></li>
+			<li><img src="img/3.jpg" ></li>
+			<li><img src="img/4.jpg" ></li>
+			<li><img src="img/5.jpg" ></li>
+			<li><img src="img/6.jpg" ></li>
+			<li><img src="img/7.jpg" ></li>
+			<li><img src="img/8.jpg" ></li>
+			<li><img src="img/9.jpg" ></li>
+			<li><img src="img/10.jpg" ></li>
+		</ul>
+
+	</div>
+	<div id="thumb-tray" style="margin-left:5vw;padding: 0px;  width:100vw;position:fixed;bottom: 0px;" class="jspScrollable">
+<div class="rows"><a href="#1" class="cross-link active-thumb"><img src="img/1.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#2" class="cross-link"><img src="img/2.jpg" class="nav-thumb" alt=src（“（“img/loading /></a></div>
+<div class="rows"><a href="#3" class="cross-link"><img src="img/3.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#4" class="cross-link"><img src="img/4.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#5" class="cross-link"><img src="img/5.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#6" class="cross-link"><img src="img/6.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#7" class="cross-link"><img src="img/7.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#8" class="cross-link"><img src="img/8.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#9" class="cross-link"><img src="img/9.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+<div class="rows"><a href="#10" class="cross-link"><img src="img/10.jpg" class="nav-thumb" alt="temp-thumb" /></a></div>
+</div>
+
+<div class="modal">LOADING</div>
+</body >
+</html>
